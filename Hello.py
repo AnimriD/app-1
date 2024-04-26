@@ -1,37 +1,16 @@
 import streamlit as st
-import random
-import turtle
-Animri = turtle.Turtle()
+import matplotlib.pyplot as plt
+import numpy as np
 
-def modify_sierpinski(t, depth, length):
-    if depth == 1:
-        for _ in range(3):
-            t.fd(length)
-            t.lt(120)
-    else:
-        modify_sierpinski(t, depth - 1, length / 2)
-        t.fd(length / 2)
-        modify_sierpinski(t, depth - 1, length / 2)
-        t.bk(length / 2)
-        t.lt(60)
-        t.fd(length / 2)
-        t.rt(60)
-        modify_sierpinski(t, depth - 1, length / 2)
-        t.rt(120)
-        t.fd(length / 2)
-        t.lt(120)
-
-def draw_sierpinski(depth, length):
-    t = turtle.Turtle()
-    screen = turtle.Screen()
-    screen.tracer(0, 0)  # Disable automatic screen updates
-    t.speed(0)  # Set maximum turtle speed
-    t.penup()
-    t.goto(-length / 2, -length / 2)  # Center the triangle
-    t.pendown()
-    modify_sierpinski(t, depth, length)
-    screen.update()  # Update the screen once drawing is complete
-    screen.mainloop()  # Keep the window open until manually closed
+def sierpinski(x, y, length, depth):
+    if depth == 0:
+        return
+    h = length * np.sqrt(3) / 2
+    points = np.array([[x, y], [x + length / 2, y + h], [x + length, y]])
+    plt.fill(points[:, 0], points[:, 1], 'k')
+    sierpinski(x, y, length / 2, depth - 1)
+    sierpinski(x + length / 2, y, length / 2, depth - 1)
+    sierpinski(x + length / 4, y + h / 2, length / 2, depth - 1)
 
 def main():
     st.title('Sierpinski Triangle')
@@ -41,8 +20,10 @@ def main():
     st.write('Adjust the parameters in the sidebar to change the Sierpinski triangle.')
 
     # Draw Sierpinski triangle
-    draw_sierpinski(depth, length)
+    plt.figure(figsize=(6, 6))
+    plt.axis('off')
+    sierpinski(0, 0, length, depth)
+    st.pyplot()
 
 if __name__ == '__main__':
     main()
-
