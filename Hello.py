@@ -1,51 +1,47 @@
-# Copyright (c) Streamlit Inc. (2018-2022) Snowflake Inc. (2022)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 import streamlit as st
-from streamlit.logger import get_logger
+import random
+import turtle
 
-LOGGER = get_logger(__name__)
+def modify_sierpinski(t, depth, length):
+    if depth == 1:
+        for _ in range(3):
+            t.fd(length)
+            t.lt(120)
+    else:
+        modify_sierpinski(t, depth - 1, length / 2)
+        t.fd(length / 2)
+        modify_sierpinski(t, depth - 1, length / 2)
+        t.bk(length / 2)
+        t.lt(60)
+        t.fd(length / 2)
+        t.rt(60)
+        modify_sierpinski(t, depth - 1, length / 2)
+        t.rt(120)
+        t.fd(length / 2)
+        t.lt(120)
 
+def draw_sierpinski(depth, length):
+    t = turtle.Turtle()
+    screen = turtle.Screen()
+    screen.tracer(0, 0)  # Disable automatic screen updates
+    t.speed(0)  # Set maximum turtle speed
+    t.penup()
+    t.goto(-length / 2, -length / 2)  # Center the triangle
+    t.pendown()
+    modify_sierpinski(t, depth, length)
+    screen.update()  # Update the screen once drawing is complete
+    screen.mainloop()  # Keep the window open until manually closed
 
-def run():
-    st.set_page_config(
-        page_title="Hello",
-        page_icon="👋",
-    )
+def main():
+    st.title('Sierpinski Triangle')
+    st.sidebar.header('Parameters')
+    depth = st.sidebar.slider('Depth', min_value=1, max_value=7, value=3)
+    length = st.sidebar.slider('Length', min_value=50, max_value=500, value=300)
+    st.write('Adjust the parameters in the sidebar to change the Sierpinski triangle.')
 
-    st.write("# Welcome to Streamlit! 👋")
+    # Draw Sierpinski triangle
+    draw_sierpinski(depth, length)
 
-    st.sidebar.success("Select a demo above.")
+if __name__ == '__main__':
+    main()
 
-    st.markdown(
-        """
-        Streamlit is an open-source app framework built specifically for
-        Machine Learning and Data Science projects.
-        **👈 Select a demo from the sidebar** to see some examples
-        of what Streamlit can do!
-        ### Want to learn more?
-        - Check out [streamlit.io](https://streamlit.io)
-        - Jump into our [documentation](https://docs.streamlit.io)
-        - Ask a question in our [community
-          forums](https://discuss.streamlit.io)
-        ### See more complex demos
-        - Use a neural net to [analyze the Udacity Self-driving Car Image
-          Dataset](https://github.com/streamlit/demo-self-driving)
-        - Explore a [New York City rideshare dataset](https://github.com/streamlit/demo-uber-nyc-pickups)
-    """
-    )
-
-
-if __name__ == "__main__":
-    run()
