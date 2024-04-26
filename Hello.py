@@ -1,6 +1,7 @@
 import streamlit as st
 import random
 import turtle
+Animri = turtle.Turtle()
 
 def modify_sierpinski(t, depth, length):
     if depth == 1:
