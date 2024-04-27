@@ -1,5 +1,4 @@
 import streamlit as st
-import matplotlib.animation as mpla
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -10,7 +9,7 @@ line, = plt.plot(T, S)
 def animate(i):
     line.set_ydata(np.sin(T+ i/50))
     
-anim = mpla.FuncAnimation(plt.gcf(), animate, interval =5)
+anim = plt.FuncAnimation(plt.gcf(), animate, interval =5)
 plt.show()
                    
 def sierpinski(x, y, length, depth):
