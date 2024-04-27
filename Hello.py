@@ -1,17 +1,7 @@
 import streamlit as st
-import matplotlib.pyplot as plt
 import numpy as np
+import matplotlib.pyplot as plt
 
-T=np.linspace(0, 2*np.pi, 100)
-S= np.sin(T)
-line, = plt.plot(T, S)
-
-def animate(i):
-    line.set_ydata(np.sin(T+ i/50))
-    
-anim = plt.FuncAnimation(plt.gcf(), animate, interval =5)
-plt.show()
-                   
 def sierpinski(x, y, length, depth):
     if depth == 0:
         return
@@ -33,6 +23,8 @@ def main():
     plt.figure(figsize=(6, 6))
     plt.axis('off')
     sierpinski(0, 0, length, depth)
+
+    # Display the plot using Streamlit
     st.pyplot()
 
 if __name__ == '__main__':
