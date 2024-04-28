@@ -2,7 +2,7 @@ import streamlit as st
 import numpy as np
 import matplotlib.pyplot as plt
 
-<<<<<<< HEAD
+
 def modify_sierpinski(ax, x, y, length, depth):
     if depth == 1:
         points = np.array([[x, y], [x + length / 2, y + length], [x + length, y]])
