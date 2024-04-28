@@ -1,26 +1,15 @@
 import streamlit as st
-import matplotlib.pyplot as plt
 import numpy as np
+import matplotlib.pyplot as plt
 
-T=np.linspace(0, 2*np.pi, 100)
-S= np.sin(T)
-line, = plt.plot(T, S)
-
-def animate(i):
-    line.set_ydata(np.sin(T+ i/50))
-    
-anim = plt.FuncAnimation(plt.gcf(), animate, interval =5)
-plt.show()
-                   
-def sierpinski(x, y, length, depth):
-    if depth == 0:
-        return
-    h = length * np.sqrt(3) / 2
-    points = np.array([[x, y], [x + length / 2, y + h], [x + length, y]])
-    plt.fill(points[:, 0], points[:, 1], 'k')
-    sierpinski(x, y, length / 2, depth - 1)
-    sierpinski(x + length / 2, y, length / 2, depth - 1)
-    sierpinski(x + length / 4, y + h / 2, length / 2, depth - 1)
+def modify_sierpinski(ax, x, y, length, depth):
+    if depth == 1:
+        points = np.array([[x, y], [x + length / 2, y + length], [x + length, y]])
+        ax.fill(points[:, 0], points[:, 1], 'k')
+    else:
+        modify_sierpinski(ax, x, y, length / 2, depth - 1)
+        modify_sierpinski(ax, x + length / 2, y, length / 2, depth - 1)
+        modify_sierpinski(ax, x + length / 4, y + length / 2, length / 2, depth - 1)
 
 def main():
     st.title('Sierpinski Triangle')
@@ -29,11 +18,14 @@ def main():
     length = st.sidebar.slider('Length', min_value=50, max_value=500, value=300)
     st.write('Adjust the parameters in the sidebar to change the Sierpinski triangle.')
 
-    # Draw Sierpinski triangle
-    plt.figure(figsize=(6, 6))
-    plt.axis('off')
-    sierpinski(0, 0, length, depth)
-    st.pyplot()
+    fig, ax = plt.subplots(figsize=(6, 6))
+    ax.set_xlim([0, length])
+    ax.set_ylim([0, length])
+    ax.axis('off')
+
+    modify_sierpinski(ax, 0, 0, length, depth)
+
+    st.pyplot(fig)
 
 if __name__ == '__main__':
     main()
