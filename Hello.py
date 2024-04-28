@@ -23,7 +23,7 @@ def main():
     ax.set_ylim([0, length])
     ax.axis('off')
 
-    modify_sierpinski(ax, 0, 0, length, depth)
+   fig= modify_sierpinski(ax, 0, 0, length, depth)
 
     st.pyplot(fig)
 
