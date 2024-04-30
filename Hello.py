@@ -33,8 +33,7 @@ def modify_sierpinski(t, depth, length):
 # Streamlit code
 st.title("Sierpinski Triangle")
 
-canvas = st.canvas(width=600, height=600)
-screen = turtle.TurtleScreen(canvas)
+
 
 t = turtle.RawTurtle(screen)
 t.speed(10)
