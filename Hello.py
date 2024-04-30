@@ -1,6 +1,7 @@
 import streamlit as st
 import turtle
 import random
+import tkinter
 
 def modify_sierpinski(t, depth, length):
     t.pd()
