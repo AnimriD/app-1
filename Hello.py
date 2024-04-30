@@ -1,43 +1,38 @@
 import streamlit as st
 import numpy as np
 import matplotlib.pyplot as plt
-import random
 
-# Define parameters
-depth = st.slider("Depth:", 1, 8, 4)
-length = st.slider("Side Length:", 50, 500, 200)
+def draw_triangle(ax, p1, p2, p3):
+    ax.plot([p1[0], p2[0], p3[0], p1[0]], [p1[1], p2[1], p3[1], p1[1]], 'k-')
 
-def modify_sierpinski(depth, length):
-    if depth == 1:
-        return
+def sierpinski(ax, p1, p2, p3, level):
+    if level == 0:
+        draw_triangle(ax, p1, p2, p3)
+    else:
+        p12 = (p1 + p2) / 2
+        p23 = (p2 + p3) / 2
+        p31 = (p3 + p1) / 2
+        sierpinski(ax, p1, p12, p31, level - 1)
+        sierpinski(ax, p12, p2, p23, level - 1)
+        sierpinski(ax, p31, p23, p3, level - 1)
 
-    # Define vertices of the triangle
-    vertices = np.array([[0, 0], [length, 0], [length / 2, length * np.sqrt(3) / 2]])
+def main():
+    st.title("Sierpinski Triangle")
 
-    # Choose a random vertex as the starting point
-    vertex = vertices[random.randint(0, 2)]
+    # Parameters
+    level = st.slider("Choose recursion depth:", min_value=0, max_value=8, value=5)
 
-    # Plot the modified Sierpinski triangle
-    _= 0
-    for _ in range(depth):
-        new_vertex = vertices[random.randint(0, 2)]
-        vertex = (vertex + new_vertex) / 2
-        plt.plot(vertex[0], vertex[1], 'ko', markersize=1)
+    fig, ax = plt.subplots()
+    ax.set_aspect('equal', 'box')
+    ax.axis('off')
 
-    # Plot the triangle outline
-    for i in range(3):
-        plt.plot([vertices[i, 0], vertices[(i + 1) % 3, 0]],
-                 [vertices[i, 1], vertices[(i + 1) % 3, 1]], 'k-')
+    p1 = np.array([0, 0])
+    p2 = np.array([1, 0])
+    p3 = np.array([0.5, np.sqrt(3) / 2])
 
-    plt.axis('equal')
-    plt.axis('off')
+    sierpinski(ax, p1, p2, p3, level)
 
-    # Set title
-    plt.title("Modified Sierpinski Triangle")
+    st.pyplot(fig)
 
-    # Show plot
-    st.pyplot()
-
-
-# Draw modified Sierpinski triangle
-modify_sierpinski(depth, length)
+if __name__ == "__main__":
+    main()
