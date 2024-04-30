@@ -3,6 +3,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 import random
 
+# Define parameters
+depth = st.slider("Depth:", 1, 8, 4)
+length = st.slider("Side Length:", 50, 500, 200)
+
 def modify_sierpinski(depth, length):
     if depth == 1:
         return
@@ -14,6 +18,7 @@ def modify_sierpinski(depth, length):
     vertex = vertices[random.randint(0, 2)]
 
     # Plot the modified Sierpinski triangle
+    _= 0
     for _ in range(depth):
         new_vertex = vertices[random.randint(0, 2)]
         vertex = (vertex + new_vertex) / 2
@@ -33,9 +38,6 @@ def modify_sierpinski(depth, length):
     # Show plot
     st.pyplot()
 
-# Define parameters
-depth = st.slider("Depth:", 1, 8, 4)
-length = st.slider("Side Length:", 50, 500, 200)
 
 # Draw modified Sierpinski triangle
 modify_sierpinski(depth, length)
