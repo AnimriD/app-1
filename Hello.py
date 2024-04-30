@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import random
 
 def modify_sierpinski(depth, length):
-    if depth == 0:
+    if depth == 1:
         return
 
     # Define vertices of the triangle
