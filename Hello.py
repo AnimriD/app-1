@@ -1,43 +1,41 @@
 import streamlit as st
 import numpy as np
 import matplotlib.pyplot as plt
-import turtle
 import random
 
-def modify_sierpinski(t,depth,length):
-    t.pd()
-    t.pensize(random.randrange(0, 10))
-    if depth == 1:
-        t.lt(60)
-        t.fd(length)
-        t.rt(120)
-        t.fd(length)
-        t.rt(120)
-        t.fd(length)
-        t.rt(180)
-    else:
-        modify_sierpinski(t, depth - 1, length/2)
-        t.fd(length/2)
-        t.color(random.randrange(0,256), random.randrange(0,256), random.randrange(0,256))
-        modify_sierpinski(t, depth - 1, length / 2)
-        t.color(random.randrange(0,256), random.randrange(0,256), random.randrange(0,256))
-        t.bk(length / 2)
-        t.lt(60)
-        t.fd(length / 2)
-        t.rt(60)
-        modify_sierpinski(t, depth - 1, length / 2)
-        t.color(random.randrange(0,256), random.randrange(0,256), random.randrange(0,256))
-        t.rt(120)
-        t.fd(length / 2)
-        t.lt(120)
-        
-st.title("Modified Sierpinski Triangle")
+def modify_sierpinski(depth, length):
+    if depth == 0:
+        return
 
-canvas = st.canvas(width=600, height=600)
-screen = turtle.TurtleScreen(canvas)
+    # Define vertices of the triangle
+    vertices = np.array([[0, 0], [length, 0], [length / 2, length * np.sqrt(3) / 2]])
 
-t = turtle.RawTurtle(screen)
-t.speed(10)
-modify_sierpinski(t,4,200)
-screen.bye()
-        
+    # Choose a random vertex as the starting point
+    vertex = vertices[random.randint(0, 2)]
+
+    # Plot the modified Sierpinski triangle
+    for _ in range(depth):
+        new_vertex = vertices[random.randint(0, 2)]
+        vertex = (vertex + new_vertex) / 2
+        plt.plot(vertex[0], vertex[1], 'ko', markersize=1)
+
+    # Plot the triangle outline
+    for i in range(3):
+        plt.plot([vertices[i, 0], vertices[(i + 1) % 3, 0]],
+                 [vertices[i, 1], vertices[(i + 1) % 3, 1]], 'k-')
+
+    plt.axis('equal')
+    plt.axis('off')
+
+    # Set title
+    plt.title("Modified Sierpinski Triangle")
+
+    # Show plot
+    st.pyplot()
+
+# Define parameters
+depth = st.slider("Depth:", 1, 8, 4)
+length = st.slider("Side Length:", 50, 500, 200)
+
+# Draw modified Sierpinski triangle
+modify_sierpinski(depth, length)
