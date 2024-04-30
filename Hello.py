@@ -13,25 +13,28 @@ def modify_sierpinski(depth, length):
     # Choose a random vertex as the starting point
     vertex = vertices[random.randint(0, 2)]
 
+    # Create Matplotlib figure and axis
+    fig, ax = plt.subplots()
+
     # Plot the modified Sierpinski triangle
     for _ in range(depth):
         new_vertex = vertices[random.randint(0, 2)]
         vertex = (vertex + new_vertex) / 2
-        plt.plot(vertex[0], vertex[1], 'ko', markersize=1)
+        ax.plot(vertex[0], vertex[1], 'ko', markersize=1)
 
     # Plot the triangle outline
     for i in range(3):
-        plt.plot([vertices[i, 0], vertices[(i + 1) % 3, 0]],
+        ax.plot([vertices[i, 0], vertices[(i + 1) % 3, 0]],
                  [vertices[i, 1], vertices[(i + 1) % 3, 1]], 'k-')
 
-    plt.axis('equal')
-    plt.axis('off')
+    ax.axis('equal')
+    ax.axis('off')
 
     # Set title
-    plt.title("Modified Sierpinski Triangle")
+    ax.set_title("Modified Sierpinski Triangle")
 
     # Show plot
-    st.pyplot()
+    st.pyplot(fig)
 
 # Define parameters
 depth = st.slider("Depth:", 1, 8, 4)
