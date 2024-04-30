@@ -1,40 +1,43 @@
 import streamlit as st
 import numpy as np
 import matplotlib.pyplot as plt
+import turtle
+import random
 
-
-def modify_sierpinski(ax, x, y, length, depth):
+def modify_sierpinski(t,depth,length):
+    t.pd()
+    t.pensize(random.randrange(0, 10))
     if depth == 1:
-        points = np.array([[x, y], [x + length / 2, y + length], [x + length, y]])
-        ax.fill(points[:, 0], points[:, 1], 'k')
+        t.lt(60)
+        t.fd(length)
+        t.rt(120)
+        t.fd(length)
+        t.rt(120)
+        t.fd(length)
+        t.rt(180)
     else:
-        modify_sierpinski(ax, x, y, length / 2, depth - 1)
-        modify_sierpinski(ax, x + length / 2, y, length / 2, depth - 1)
-        modify_sierpinski(ax, x + length / 4, y + length / 2, length / 2, depth - 1)
+        modify_sierpinski(t, depth - 1, length/2)
+        t.fd(length/2)
+        t.color(random.randrange(0,256), random.randrange(0,256), random.randrange(0,256))
+        modify_sierpinski(t, depth - 1, length / 2)
+        t.color(random.randrange(0,256), random.randrange(0,256), random.randrange(0,256))
+        t.bk(length / 2)
+        t.lt(60)
+        t.fd(length / 2)
+        t.rt(60)
+        modify_sierpinski(t, depth - 1, length / 2)
+        t.color(random.randrange(0,256), random.randrange(0,256), random.randrange(0,256))
+        t.rt(120)
+        t.fd(length / 2)
+        t.lt(120)
+        
+st.title("Modified Sierpinski Triangle")
 
-progress_bar = st.sidebar.progress(0)
-status_text = st.sidebar.empty()
-last_rows = np.random.randn(1, 1)
-chart = st.line_chart(last_rows)
+canvas = st.canvas(width=600, height=600)
+screen = turtle.TurtleScreen(canvas)
 
-for i in range(1, 101):
-    new_rows = last_rows[-1, :] + np.random.randn(5, 1).cumsum(axis=0)
-    status_text.text("%i%% Complete" % i)
-    chart.add_rows(new_rows)
-    progress_bar.progress(i)
-    last_rows = new_rows
-    fig, ax = plt.subplots(figsize=(6, 6))
-    ax.set_xlim([0, length])
-    ax.set_ylim([0, length])
-    ax.axis('off')
-
-    modify_sierpinski(ax, 0, 0, length, depth)
-
-    st.pyplot(fig)
-progress_bar.empty()
-
-
-# Streamlit widgets automatically run the script from top to bottom. Since
-# this button is not connected to any other logic, it just causes a plain
-# rerun.
-st.button("Re-run")
+t = turtle.RawTurtle(screen)
+t.speed(10)
+modify_sierpinski(t,4,200)
+screen.bye()
+        
